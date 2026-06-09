@@ -12,7 +12,7 @@ Central bibliography. Operational guidance lives in the other references; read t
 - Kabir et al., "Is Stack Overflow Obsolete? An Empirical Study of the Characteristics of ChatGPT Answers to Stack Overflow Questions", CHI 2024 — 52% of answers contained incorrect information; evaluators missed AI errors 39% of the time: https://dl.acm.org/doi/10.1145/3613904.3642596
 - CloudAPIBench, "On Mitigating Code LLM Hallucinations with API Documentation" (AWS, 2024) — 38.58% valid invocations for low-frequency APIs: https://arxiv.org/abs/2407.09726
 - De-Hallucinator (2024) — LLMs routinely invent non-existent APIs; project-API grounding fixed 63.2% of hallucination-caused failures: https://arxiv.org/abs/2401.01701
-- Spracklen et al., "We Have a Package for You!" (USENIX Security 2025) — package hallucination averages 19.6% across 16 models: https://www.usenix.org/conference/usenixsecurity25/presentation/spracklen
+- Spracklen et al., "We Have a Package for You!" (USENIX Security 2025) — package hallucination averages ~19.7% across 16 models (5.2% commercial, 21.7% open-source): https://www.usenix.org/conference/usenixsecurity25/presentation/spracklen
 
 ## Documentation craft references
 

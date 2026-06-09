@@ -9,6 +9,17 @@ You are reviewing generated or changed documentation before it ships. Apply the 
 
 These rules exist because AI agents document from memory of how APIs _usually_ look, not from the code in front of them. Published research: half of AI answers to programming questions contain incorrect information, and models produce valid invocations for infrequent APIs barely a third of the time — yet the prose sounds authoritative either way. Readers cannot tell verified docs from hallucinated docs. You can, because you have the source.
 
+## Compatibility
+
+This is a portable instruction skill. It requires no MCP server, network access,
+API key, shell command, local executable, or bundled script. It can be used in
+any runtime that supports `SKILL.md` plus directly linked [references/](references/)
+files; `agents/openai.yaml` is lightweight display metadata.
+
+This skill does not replace link checkers, doc linters, or doctest-style
+executable-docs tooling. Use those for mechanical verification; use this skill
+for the judgement layer — claims, drift, and substance.
+
 ## How to use this skill
 
 **Guard-pass mode** (recommended): after documentation or docstrings have been generated or edited, verify every claim against the source and run the self-check before delivery.

@@ -70,7 +70,7 @@ analysis, and test-running tasks covered by the frontmatter exclusions.
 LLM-generated code has measurable, systematic failure modes that generic "follow clean code" instructions do not catch. Examples backed by published research:
 
 - **Code duplication grew 8x** in tracked codebases between 2021 and 2024 (GitClear 2025 report).
-- **Package hallucination rate averages 19.6%** across 16 models (Spracklen et al., USENIX Security '25).
+- **Package hallucination rate averages ~19.7%** across 16 models (Spracklen et al., USENIX Security '25).
 - LLMs often wrap risky operations in broad catch-all handlers that swallow errors (Karpathy).
 - AI agents **"declare success despite failing tests"** by returning hardcoded fixture values (Fowler, Patterns for Reducing Friction).
 - Function size grew from 142 to 267 LoC, cyclomatic complexity from 4.2 to 8.1 in AI-assisted commits (GitClear).

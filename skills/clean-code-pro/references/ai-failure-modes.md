@@ -155,7 +155,7 @@ if counter > daily_limit:
 
 **Pattern.** Imports, method names, or signatures that don't exist in the version of the library actually installed.
 
-**Source.** Spracklen et al., USENIX Security '25, "Package Hallucinations" — 16 models tested; average hallucination rate 19.6% (commercial ~5%, open source ~21%). arXiv 2409.20550 "LLM Hallucinations in Practical Code Generation" gives a taxonomy. arXiv 2407.09726, "Mitigating Code LLM Hallucinations with API Documentation".
+**Source.** Spracklen et al., USENIX Security '25, "Package Hallucinations" — 16 models tested; average hallucination rate ~19.7% (5.2% commercial, 21.7% open-source). arXiv 2409.20550 "LLM Hallucinations in Practical Code Generation" gives a taxonomy. arXiv 2407.09726, "Mitigating Code LLM Hallucinations with API Documentation".
 
 **Rule.** Every import and external API call must be verified against the actual installed version — read the package, check the lockfile, or import and inspect. Do not call a method based on what "should exist."
 

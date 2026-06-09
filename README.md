@@ -11,7 +11,7 @@ Generic "follow clean code" instructions don't catch what LLMs actually get wron
 | **clean-code-pro** | Production code — Clean Code, SOLID, DRY/KISS/YAGNI, plus 14 documented LLM failure modes | an agent writes, edits, refactors, or fixes implementation code |
 | **clean-test-pro** | Test code — behavior-over-implementation, justified mocks, no framework re-testing, no near-duplicate bloat (pytest · PHPUnit/Pest · Jest/Vitest, + LLM-app rules) | an agent writes or changes tests |
 | **clean-docs-pro** | Documentation — every symbol, flag, endpoint, and code sample verified against the source; docs-vs-code drift; unverifiable claims (READMEs, API refs, docstrings, changelogs) | an agent writes or changes docs, or code changes documented behavior |
-| **clean-security-pro** | Security — injection, broken access control, secrets in code, weak crypto, SSRF, insecure deserialization, plus slopsquatting and supply-chain risk; mapped to OWASP Top 10 and CWE Top 25 | an agent writes or changes code touching untrusted input, auth, secrets, I/O, or dependencies |
+| **clean-security-pro** | Security — injection, broken access control, CSRF, mass assignment, secrets in code, weak crypto, SSRF, insecure deserialization, LLM-app risks (prompt-injection containment, model output to sinks, excessive agency), plus slopsquatting and supply-chain risk; mapped to OWASP Top 10:2025, the 2025 CWE Top 25, and the OWASP LLM Top 10 | an agent writes or changes code touching untrusted input, auth, secrets, I/O, dependencies, or LLM/agent calls |
 
 Each skill runs in three modes: **guard-pass** (review a diff before it ships), **live** (apply the rules while writing when invoked explicitly), and **review** (produce a structured findings report). They defer to your project's linters, formatters, test runners, and security scanners — they own the judgement layer, not the mechanical one.
 
@@ -37,7 +37,7 @@ Skills are portable instructions — no MCP server, API key, network access, or 
 The classic principles are the foundation, but the measured failure modes are AI-specific:
 
 - **Code duplication grew 8×** in tracked codebases between 2021 and 2024 (GitClear 2025).
-- **Package hallucination averages 19.6%** across 16 models (Spracklen et al., USENIX Security '25).
+- **Package hallucination averages ~19.7%** across 16 models — 5.2% commercial, 21.7% open-source (Spracklen et al., USENIX Security '25).
 - **Half of AI answers to programming questions** contain incorrect information, and evaluators miss the errors 39% of the time (Kabir et al., CHI 2024).
 - Agents **declare success despite failing tests** by returning hardcoded fixture values (Fowler).
 - **~40% of AI-generated programs were vulnerable** in security-relevant scenarios, and developers with an AI assistant wrote less secure code while believing it was *more* secure (Pearce et al., S&P 2022; Perry et al., CCS 2023).

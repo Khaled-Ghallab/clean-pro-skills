@@ -9,6 +9,17 @@ You are reviewing generated or changed test code before it ships. Enforce the ru
 
 These rules exist because coding agents over-generate tests. The common failure modes: mock-heavy unit tests that assert implementation details, near-duplicate test bodies that differ by one value, and tests that re-verify the framework instead of the project's logic. Each looks productive in a diff and costs maintenance forever.
 
+## Compatibility
+
+This is a portable instruction skill. It requires no MCP server, network access,
+API key, shell command, local executable, or bundled script. It can be used in
+any runtime that supports `SKILL.md` plus directly linked [references/](references/)
+files; `agents/openai.yaml` is lightweight display metadata.
+
+This skill does not replace the project's test runner, coverage tooling, or
+linters. Use those for mechanical verification; use this skill for the
+judgement layer around test quality.
+
 ## When this skill activates
 
 - A coding agent has just written new test functions or test files, in any language
