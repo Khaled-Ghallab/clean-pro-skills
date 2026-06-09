@@ -1,6 +1,6 @@
 # AI Failure Modes — the unique value of this skill
 
-This file catalogs 14 systematic ways LLMs produce bad code, each backed by published research or widely-documented engineering observations. Read this first if you are an AI agent applying this skill — these are the patterns most likely to enter your own output.
+This file catalogs 15 systematic ways LLMs produce bad code, each backed by published research or widely-documented engineering observations. Read this first if you are an AI agent applying this skill — these are the patterns most likely to enter your own output.
 
 For each failure mode you get:
 - **Pattern:** one-line description.
@@ -24,6 +24,7 @@ For each failure mode you get:
 - 12. Declares success with mock fallbacks in production code
 - 13. Plausible-but-wrong code
 - 14. YAGNI violations through speculative configurability
+- 15. Async and concurrency hazards
 - Cross-cutting observation
 - Where this skill differs from generic clean-code rules
 
@@ -313,10 +314,40 @@ renderInvoice(invoice)
 
 ---
 
+## 15. Async and concurrency hazards
+
+**Pattern.** Unawaited promises and futures (fire-and-forget whose errors vanish), blocking I/O inside an async context (freezes the event loop), shared mutable state across concurrent tasks with no synchronization, and sequential `await` of independent operations.
+
+**Source.** Widely observed in field reports on agentic coding; anecdotal but consistent, like #14. The error-swallowing half is the async face of #1 — a dropped promise is a catch-all handler nobody wrote. The race-condition class is CWE-362 (see clean-security-pro for the security-relevant cases).
+
+**Bad:**
+```text
+async handleUpload(file):
+  validateAsync(file)              // missing await — rejection is silently dropped,
+  await saveToStorage(file)        // and save races the validation
+
+async getReport():
+  rows = blockingQuery(...)        // sync I/O inside async — stalls every other task
+```
+
+**Good:**
+```text
+async handleUpload(file):
+  await validateAsync(file)        // failures propagate before the save runs
+  await saveToStorage(file)
+
+async getReport():
+  rows = await asyncQuery(...)
+```
+
+**Rule.** Every promise/future is awaited, returned, or explicitly handed to a supervisor that handles its errors — never dropped. No blocking I/O in async paths. Shared state mutated by concurrent tasks needs a lock, an atomic operation, or a redesign. Independent awaits may run concurrently (`Promise.all`, `gather`) — but only when partial failure is handled.
+
+---
+
 ## Cross-cutting observation
 
-Eight of the 14 failure modes (1, 2, 3, 9, 12, 14, plus pieces of 8 and 11) trace to one root cause: **the model is biased toward emitting more code, more parameters, more guards, more abstractions** — anything but the minimum required by the spec. The cure is restraint, not knowledge. Before writing each line, ask: *does the spec require this, today?* If no, do not write it.
+Eight of the 15 failure modes (1, 2, 3, 9, 12, 14, plus pieces of 8 and 11) trace to one root cause: **the model is biased toward emitting more code, more parameters, more guards, more abstractions** — anything but the minimum required by the spec. The cure is restraint, not knowledge. Before writing each line, ask: *does the spec require this, today?* If no, do not write it.
 
 ## Where this skill differs from generic clean-code rules
 
-Sections in [naming-and-functions.md](naming-and-functions.md), [solid.md](solid.md), and [dry-kiss-yagni.md](dry-kiss-yagni.md) cover the classic principles. They are necessary but not sufficient — an LLM that "knows" SOLID can still produce code that fails for the reasons in this file. The 14 patterns above are the high-leverage check. Walk them before delivery.
+Sections in [naming-and-functions.md](naming-and-functions.md), [solid.md](solid.md), and [dry-kiss-yagni.md](dry-kiss-yagni.md) cover the classic principles. They are necessary but not sufficient — an LLM that "knows" SOLID can still produce code that fails for the reasons in this file. The 15 patterns above are the high-leverage check. Walk them before delivery.

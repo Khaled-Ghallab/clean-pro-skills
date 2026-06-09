@@ -125,6 +125,7 @@ Pull [ai-failure-modes.md](ai-failure-modes.md) for every check here.
 12. **Any hardcoded "success" returns, mock fixtures, fake values in production code?** Critical.
 13. Any code that looks copy-pasted from a similar function (off-by-one, wrong null semantic)?
 14. Any speculative configurability — flags, env vars, optional params without callers?
+15. Any unawaited promise/future, blocking I/O in an async path, or unsynchronized shared state across concurrent tasks?
 
 ## What to do with each finding
 

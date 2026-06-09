@@ -41,7 +41,7 @@ The reference files are:
 - [references/comments-and-formatting.md](references/comments-and-formatting.md) — when to comment, when to delete, matching neighbor style.
 - [references/solid.md](references/solid.md) — SRP, OCP, LSP, ISP, DIP with the modern phrasings and detection smells.
 - [references/dry-kiss-yagni.md](references/dry-kiss-yagni.md) — knowledge vs code duplication, Sandi Metz's re-inline rule, McCabe complexity, Fowler's YAGNI cost categories.
-- [references/ai-failure-modes.md](references/ai-failure-modes.md) — the 14 systematic ways LLMs produce bad code. **Read this one first if you are an AI agent reading this skill.** It is the highest-leverage file in the skill.
+- [references/ai-failure-modes.md](references/ai-failure-modes.md) — the 15 systematic ways LLMs produce bad code. **Read this one first if you are an AI agent reading this skill.** It is the highest-leverage file in the skill.
 - [references/review-checklist.md](references/review-checklist.md) — structured walk-through for review mode.
 - [references/sources.md](references/sources.md) — central bibliography for source URLs. Read it only when you need to verify or cite an external source.
 
@@ -117,16 +117,17 @@ These are the rules to follow on every code change. They are imperative, not sug
 20. **Enumerate boundary cases before writing them.** For any range, off-by-one, null/empty/one/many, even/odd, or unicode/byte boundary, write the case list in a comment first. Cover each case in code before moving on.
 21. **Strip dead code before delivery.** Run a linter or grep pass for unused imports, unused symbols, unreachable branches, and "just in case" exports. Remove them. A function that nothing calls today does not get to live for "someday."
 22. **Read before write.** Before writing in an unfamiliar repo, read the file you'll edit, one neighbor, and any project rules file (CLAUDE.md, AGENTS.md, README's "conventions" section). Use the project's existing helpers, error types, and logging.
+23. **No dropped promises, no blocking in async.** Every promise/future is awaited, returned, or handed to an error-handling supervisor — a fire-and-forget call is a swallowed error waiting to happen. No synchronous I/O inside async paths. Shared state touched by concurrent tasks is synchronized or redesigned. (ai-failure-modes #15)
 
 ### Refactoring discipline
 
-23. **Preserve observable behavior when refactoring.** When the user asks you to clean up, simplify, or refactor existing code, do not change the contract — same inputs produce the same outputs, same exceptions raised, same side effects, same ordering guarantees. If you spot a bug while refactoring, flag it separately and ask before changing it. Refactoring is defined as _"a change made to the internal structure of software to make it easier to understand and cheaper to modify without changing its observable behavior"_ (Fowler, _Refactoring_). Bug fixes and refactors are two operations — never bundle them in a single change.
+24. **Preserve observable behavior when refactoring.** When the user asks you to clean up, simplify, or refactor existing code, do not change the contract — same inputs produce the same outputs, same exceptions raised, same side effects, same ordering guarantees. If you spot a bug while refactoring, flag it separately and ask before changing it. Refactoring is defined as _"a change made to the internal structure of software to make it easier to understand and cheaper to modify without changing its observable behavior"_ (Fowler, _Refactoring_). Bug fixes and refactors are two operations — never bundle them in a single change.
 
 ## Self-check before delivery
 
 Before you show the user the code you wrote or edited:
 
-1. Walk imperatives 1–23 against your diff. Fix every violation.
+1. Walk imperatives 1–24 against your diff. Fix every violation.
 2. For new functions, count: lines ≤ 20? params ≤ 4? complexity feels ≤ 10? names reveal intent?
 3. For new comments, ask: does this explain _why_? If it explains _what_, delete it.
 4. For new error handling: is the caught error type specific? Does the handler do something other than silently return?

@@ -10,7 +10,7 @@ The security skill also covers the code that *calls* LLMs — prompt-injection c
 
 | Skill | Guards | Use it after… |
 | --- | --- | --- |
-| **clean-code-pro** | Production code — Clean Code, SOLID, DRY/KISS/YAGNI, plus 14 documented LLM failure modes | an agent writes, edits, refactors, or fixes implementation code |
+| **clean-code-pro** | Production code — Clean Code, SOLID, DRY/KISS/YAGNI, plus 15 documented LLM failure modes | an agent writes, edits, refactors, or fixes implementation code |
 | **clean-test-pro** | Test code — behavior-over-implementation, justified mocks, no framework re-testing, no near-duplicate bloat (pytest · PHPUnit/Pest · Jest/Vitest, + LLM-app rules) | an agent writes or changes tests |
 | **clean-docs-pro** | Documentation — every symbol, flag, endpoint, and code sample verified against the source; docs-vs-code drift; unverifiable claims (READMEs, API refs, docstrings, changelogs) | an agent writes or changes docs, or code changes documented behavior |
 | **clean-security-pro** | Security — injection, broken access control, CSRF, mass assignment, secrets in code, weak crypto, SSRF, insecure deserialization, LLM-app risks (prompt-injection containment, model output to sinks, excessive agency), plus slopsquatting and supply-chain risk; mapped to OWASP Top 10:2025, the 2025 CWE Top 25, and the OWASP LLM Top 10 | an agent writes or changes code touching untrusted input, auth, secrets, I/O, dependencies, or LLM/agent calls |
