@@ -1,0 +1,4 @@
+interface:
+  display_name: "Clean Infra Pro"
+  short_description: "CI/CD, container, and IaC security guardrails for AI agents"
+  default_prompt: "Use $clean-infra-pro after workflow YAML, Dockerfiles, or IaC are written or changed to review them for pipeline injection, overprivilege, and supply-chain risks."

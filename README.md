@@ -1,6 +1,6 @@
 # clean-pro-skills
 
-Four review-gate [Agent Skills](https://github.com/vercel-labs/skills) that catch the **systematic** ways AI coding agents produce bad code, tests, documentation, and security holes — each rule traced to a primary source (Uncle Bob, Fowler, Hunt & Thomas, McCabe, Metz, OWASP, CWE) or to published 2022–2026 research on LLM code generation and security.
+Five review-gate [Agent Skills](https://github.com/vercel-labs/skills) that catch the **systematic** ways AI coding agents produce bad code, tests, documentation, security holes, and insecure infrastructure — each rule traced to a primary source (Uncle Bob, Fowler, Hunt & Thomas, McCabe, Metz, OWASP, CWE) or to published 2022–2026 research on LLM code generation and security.
 
 Generic "follow clean code" instructions don't catch what LLMs actually get wrong. These skills add the AI-specific layer: swallowed exceptions, hallucinated APIs, mock fallbacks declared as success, over-eager abstraction, docs written from memory instead of from the source, test bloat that asserts implementation instead of behavior, and plausible-but-insecure code that ships injection, missing authorization, and slopsquatted dependencies.
 
@@ -14,6 +14,7 @@ The security skill also covers the code that *calls* LLMs — prompt-injection c
 | **clean-test-pro** | Test code — behavior-over-implementation, justified mocks, no framework re-testing, no near-duplicate bloat (pytest · PHPUnit/Pest · Jest/Vitest, + LLM-app rules) | an agent writes or changes tests |
 | **clean-docs-pro** | Documentation — every symbol, flag, endpoint, and code sample verified against the source; docs-vs-code drift; unverifiable claims (READMEs, API refs, docstrings, changelogs) | an agent writes or changes docs, or code changes documented behavior |
 | **clean-security-pro** | Security — injection, broken access control, CSRF, mass assignment, secrets in code, weak crypto, SSRF, insecure deserialization, LLM-app risks (prompt-injection containment, model output to sinks, excessive agency), plus slopsquatting and supply-chain risk; mapped to OWASP Top 10:2025, the 2025 CWE Top 25, and the OWASP LLM Top 10 | an agent writes or changes code touching untrusted input, auth, secrets, I/O, dependencies, or LLM/agent calls |
+| **clean-infra-pro** | Infrastructure — CI/CD workflow injection, `pull_request_target` misuse, overprivileged tokens, unpinned actions/images/modules, secrets in layers, root containers, wildcard IAM, open ingress; mapped to OWASP CICD-SEC and CIS benchmarks | an agent writes or changes workflow YAML, Dockerfiles, compose files, or IaC |
 
 Each skill runs in three modes: **guard-pass** (review a diff before it ships), **live** (apply the rules while writing when invoked explicitly), and **review** (produce a structured findings report). They defer to your project's linters, formatters, test runners, and security scanners — they own the judgement layer, not the mechanical one.
 
@@ -54,6 +55,7 @@ skills/
   clean-test-pro/       SKILL.md + references/ + agents/
   clean-docs-pro/       SKILL.md + references/ + agents/
   clean-security-pro/   SKILL.md + references/ + agents/
+  clean-infra-pro/      SKILL.md + references/ + agents/
 ```
 
 ## License
