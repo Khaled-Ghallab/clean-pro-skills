@@ -56,7 +56,20 @@ skills/
   clean-docs-pro/       SKILL.md + references/ + agents/
   clean-security-pro/   SKILL.md + references/ + agents/
   clean-infra-pro/      SKILL.md + references/ + agents/
+evals/                  defective fixtures + expected-findings per skill
+scripts/verify-skills.mjs   link / frontmatter / stat-drift checker (CI)
 ```
+
+## Verifying the skills
+
+The skills practice what they preach. `scripts/verify-skills.mjs` (run in CI on
+every push and PR) dogfoods clean-docs-pro: it checks that every internal link
+resolves, every skill has valid frontmatter, and shared statistics don't drift
+across files. Run it locally with `node scripts/verify-skills.mjs`.
+
+`evals/` holds intentionally defective fixtures with an `expected-findings.md`
+per skill — review a fixture with the matching skill and compare the report to
+the table to catch regressions when a rule changes. See [evals/README.md](evals/README.md).
 
 ## License
 

@@ -1,0 +1,23 @@
+# EVAL FIXTURE — intentionally insecure CI config. Never run, copy, or deploy.
+name: build
+on: pull_request_target          # I2: runs with secrets
+
+permissions: write-all           # I3
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}   # I2: fork code
+      - uses: some-org/setup-thing@main                     # I4: unpinned tag
+      - name: greet
+        run: echo "Building PR ${{ github.event.pull_request.title }}"  # I1: injection
+      - name: deploy
+        run: |
+          curl https://install.example.com/agent.sh | sh    # I11: net-to-shell
+          echo "token=${{ secrets.DEPLOY_TOKEN }}"          # I5: secret to log
+      - name: scan
+        run: trivy fs .
+        continue-on-error: true                             # I16: weakened gate
