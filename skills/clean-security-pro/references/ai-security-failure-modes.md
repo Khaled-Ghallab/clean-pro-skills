@@ -105,7 +105,8 @@ open(base_dir + "/" + user_path)                 # user_path = "../../etc/passwd
 ```text
 subprocess.run(["convert", filename, "out.png"])           # argument array, no shell
 safe = os.path.realpath(os.path.join(base_dir, user_path))
-if not safe.startswith(os.path.realpath(base_dir)): reject()
+if not safe.startswith(os.path.realpath(base_dir) + os.sep): reject()
+# the trailing separator matters: without it, "/uploads-evil" passes a "/uploads" check
 ```
 
 **Rule.** Parameterize SQL, pass subprocess arguments as an array (never a shell string), and canonicalize-then-verify any path built from input.
@@ -127,7 +128,7 @@ client = Client(api_key="AKIA...realsecret...")   # even in a test, it is leaked
 **Good:**
 ```text
 STRIPE_KEY = os.environ["STRIPE_KEY"]
-client = Client(api_key=os.environ["AWS_ACCESS_KEY_ID"])
+client = Client(api_key=os.environ["PAYMENT_API_KEY"])
 # tests use an obvious placeholder: "sk_test_PLACEHOLDER"
 ```
 
