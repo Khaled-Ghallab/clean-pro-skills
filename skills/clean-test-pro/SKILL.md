@@ -36,7 +36,7 @@ These rules are universal, but their application is not. Before reviewing:
    - Python / pytest → [references/pytest.md](references/pytest.md)
    - PHP / PHPUnit / Pest / WordPress → [references/phpunit.md](references/phpunit.md)
    - JavaScript / TypeScript / Jest / Vitest → [references/jest.md](references/jest.md)
-3. If the project calls LLM APIs, uses agent frameworks, or wires up observability/telemetry, also read [references/llm-app-testing.md](references/llm-app-testing.md) — it adds three rules specific to LLM applications.
+3. If the project calls LLM APIs, uses agent frameworks, or wires up observability/telemetry, also read [references/llm-app-testing.md](references/llm-app-testing.md) — it adds three rules (11–13) specific to LLM applications.
 4. Map the project's system boundaries: network calls, databases, filesystem, clock and randomness, third-party SDKs, LLM APIs. Existing fixtures and test helpers usually reveal where the project already draws these lines.
 
 ## What to do
@@ -48,7 +48,7 @@ These rules are universal, but their application is not. Before reviewing:
 
 When writing new tests, ask for each test: "What specific bug does this catch that no other test in this suite catches?" If you can't answer clearly, don't write it.
 
-## The Nine Rules
+## The Ten Rules
 
 ### Rule 1: Test behavior, not implementation
 
@@ -103,6 +103,19 @@ Never mock a data model, DTO, entity, or state object. Construct a real instance
 
 When database queries, schema behavior, or persistence logic _is the subject_ of the test, run against a real test database with real migrations applied via fixtures. Mocking the session there tests nothing. Mocking the database is fine when persistence is only a side effect of the behavior under test.
 
+### Rule 10: Tests are deterministic
+
+A test that passes only sometimes is worse than no test — it trains the team to re-run and ignore failures, and a real regression hides in the noise. The flaky patterns to flag:
+
+- **Sleep-based synchronization** (`sleep(2)` then assert) — wait on the condition or event, with a timeout, not on wall time.
+- **Real network calls** — a remote outage becomes a test failure; mock the boundary (Rule 2).
+- **Wall clock, timezone, or locale dependence** — a test that fails at midnight, on the 31st, or on a non-UTC machine; freeze or inject the clock.
+- **Uncontrolled randomness** — seed it or inject it.
+- **Execution-order dependence** — a test that only passes after another test ran has hidden shared state; each test owns its setup.
+
+**Violation pattern:** any `sleep` used as synchronization; any assertion on `now()` computed inside the test.
+**Fix:** control time, randomness, and ordering; wait on conditions, not durations.
+
 ## Reporting format
 
 When flagging violations, use this format:
@@ -119,7 +132,7 @@ Group violations by file. If a file has no violations, don't mention it.
 
 Not all violations are equal. Use judgment:
 
-- **Must fix:** Rules 1, 2, 8 — these hide real bugs or make tests brittle
+- **Must fix:** Rules 1, 2, 8, 10 — these hide real bugs, make tests brittle, or erode trust in the suite
 - **Should fix:** Rules 3, 4, 5, 7 — these cause bloat and maintenance drag
 - **Sacred:** Rule 6 — never delete, always allow
 - **Worth noting:** Rule 9 — test architecture; flag it, but don't block small changes on it
