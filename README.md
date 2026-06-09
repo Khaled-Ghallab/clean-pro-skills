@@ -1,8 +1,8 @@
 # clean-pro-skills
 
-Three review-gate [Agent Skills](https://github.com/vercel-labs/skills) that catch the **systematic** ways AI coding agents produce bad code, tests, and documentation — each rule traced to a primary source (Uncle Bob, Fowler, Hunt & Thomas, McCabe, Metz) or to published 2024–2026 research on LLM code generation.
+Four review-gate [Agent Skills](https://github.com/vercel-labs/skills) that catch the **systematic** ways AI coding agents produce bad code, tests, documentation, and security holes — each rule traced to a primary source (Uncle Bob, Fowler, Hunt & Thomas, McCabe, Metz, OWASP, CWE) or to published 2022–2026 research on LLM code generation and security.
 
-Generic "follow clean code" instructions don't catch what LLMs actually get wrong. These skills add the AI-specific layer: swallowed exceptions, hallucinated APIs, mock fallbacks declared as success, over-eager abstraction, docs written from memory instead of from the source, and test bloat that asserts implementation instead of behavior.
+Generic "follow clean code" instructions don't catch what LLMs actually get wrong. These skills add the AI-specific layer: swallowed exceptions, hallucinated APIs, mock fallbacks declared as success, over-eager abstraction, docs written from memory instead of from the source, test bloat that asserts implementation instead of behavior, and plausible-but-insecure code that ships injection, missing authorization, and slopsquatted dependencies.
 
 ## The skills
 
@@ -11,15 +11,16 @@ Generic "follow clean code" instructions don't catch what LLMs actually get wron
 | **clean-code-pro** | Production code — Clean Code, SOLID, DRY/KISS/YAGNI, plus 14 documented LLM failure modes | an agent writes, edits, refactors, or fixes implementation code |
 | **clean-test-pro** | Test code — behavior-over-implementation, justified mocks, no framework re-testing, no near-duplicate bloat (pytest · PHPUnit/Pest · Jest/Vitest, + LLM-app rules) | an agent writes or changes tests |
 | **clean-docs-pro** | Documentation — every symbol, flag, endpoint, and code sample verified against the source; docs-vs-code drift; unverifiable claims (READMEs, API refs, docstrings, changelogs) | an agent writes or changes docs, or code changes documented behavior |
+| **clean-security-pro** | Security — injection, broken access control, secrets in code, weak crypto, SSRF, insecure deserialization, plus slopsquatting and supply-chain risk; mapped to OWASP Top 10 and CWE Top 25 | an agent writes or changes code touching untrusted input, auth, secrets, I/O, or dependencies |
 
-Each skill runs in three modes: **guard-pass** (review a diff before it ships), **live** (apply the rules while writing when invoked explicitly), and **review** (produce a structured findings report). They defer to your project's linters, formatters, and test runners — they own the judgement layer, not the mechanical one.
+Each skill runs in three modes: **guard-pass** (review a diff before it ships), **live** (apply the rules while writing when invoked explicitly), and **review** (produce a structured findings report). They defer to your project's linters, formatters, test runners, and security scanners — they own the judgement layer, not the mechanical one.
 
 ## Install
 
 With the [`skills` CLI](https://github.com/vercel-labs/skills):
 
 ```bash
-# all three
+# all four
 npx skills add Khaled-Ghallab/clean-pro-skills --skill '*'
 
 # or pick one
@@ -39,6 +40,7 @@ The classic principles are the foundation, but the measured failure modes are AI
 - **Package hallucination averages 19.6%** across 16 models (Spracklen et al., USENIX Security '25).
 - **Half of AI answers to programming questions** contain incorrect information, and evaluators miss the errors 39% of the time (Kabir et al., CHI 2024).
 - Agents **declare success despite failing tests** by returning hardcoded fixture values (Fowler).
+- **~40% of AI-generated programs were vulnerable** in security-relevant scenarios, and developers with an AI assistant wrote less secure code while believing it was *more* secure (Pearce et al., S&P 2022; Perry et al., CCS 2023).
 
 Full bibliographies live in each skill's `references/sources.md`.
 
@@ -46,9 +48,10 @@ Full bibliographies live in each skill's `references/sources.md`.
 
 ```
 skills/
-  clean-code-pro/   SKILL.md + references/ + agents/
-  clean-test-pro/   SKILL.md + references/ + agents/
-  clean-docs-pro/   SKILL.md + references/ + agents/
+  clean-code-pro/       SKILL.md + references/ + agents/
+  clean-test-pro/       SKILL.md + references/ + agents/
+  clean-docs-pro/       SKILL.md + references/ + agents/
+  clean-security-pro/   SKILL.md + references/ + agents/
 ```
 
 ## License

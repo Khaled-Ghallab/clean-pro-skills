@@ -1,0 +1,4 @@
+interface:
+  display_name: "Clean Security Pro"
+  short_description: "Security review guardrails for AI agents"
+  default_prompt: "Use $clean-security-pro after security-sensitive code is written or changed to review it for vulnerabilities, secrets, and supply-chain risks."
