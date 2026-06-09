@@ -184,7 +184,7 @@ AES.new(key, AES.MODE_GCM)                // AEAD; unique nonce per message
 
 **Pattern.** The endpoint authenticates the user but never checks whether *this* user may act on *this* resource — the gap is an absence, so it is invisible in a diff.
 
-**Source.** OWASP A01:2021 Broken Access Control (the #1 category); CWE-862 (missing authorization), CWE-639 (IDOR).
+**Source.** OWASP A01:2025 Broken Access Control (the #1 category); CWE-862 (missing authorization), CWE-639 (IDOR).
 
 **Bad:**
 ```text
