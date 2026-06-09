@@ -4,6 +4,8 @@ Four review-gate [Agent Skills](https://github.com/vercel-labs/skills) that catc
 
 Generic "follow clean code" instructions don't catch what LLMs actually get wrong. These skills add the AI-specific layer: swallowed exceptions, hallucinated APIs, mock fallbacks declared as success, over-eager abstraction, docs written from memory instead of from the source, test bloat that asserts implementation instead of behavior, and plausible-but-insecure code that ships injection, missing authorization, and slopsquatted dependencies.
 
+The security skill also covers the code that *calls* LLMs — prompt-injection containment, model output treated as untrusted input, agent-tool least privilege, prompt secrets, consumption caps, and RAG tenant isolation — mapped to the OWASP LLM Top 10. Review rules for AI-written code and for AI-calling code, in one place.
+
 ## The skills
 
 | Skill | Guards | Use it after… |
@@ -34,7 +36,7 @@ Skills are portable instructions — no MCP server, API key, network access, or 
 
 ## Why this exists
 
-The classic principles are the foundation, but the measured failure modes are AI-specific:
+The classic principles — and the current standards: OWASP Top 10:2025, the 2025 CWE Top 25, OWASP LLM Top 10 — are the foundation, but the measured failure modes are AI-specific:
 
 - **Code duplication grew 8×** in tracked codebases between 2021 and 2024 (GitClear 2025).
 - **Package hallucination averages ~19.7%** across 16 models — 5.2% commercial, 21.7% open-source (Spracklen et al., USENIX Security '25).
