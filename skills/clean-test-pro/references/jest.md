@@ -1,6 +1,6 @@
 # JavaScript / TypeScript / Jest / Vitest Patterns
 
-Concrete applications of the nine rules for JS/TS projects. Read this when reviewing or writing Jest or Vitest tests.
+Concrete applications of the ten rules for JS/TS projects. Read this when reviewing or writing Jest or Vitest tests.
 
 ## Rule 2: Mock boundaries in JS/TS
 

@@ -1,6 +1,6 @@
 # PHP / PHPUnit / Pest Patterns
 
-Concrete applications of the nine rules for PHP projects, including WordPress and WooCommerce. Read this when reviewing or writing PHP tests.
+Concrete applications of the ten rules for PHP projects, including WordPress and WooCommerce. Read this when reviewing or writing PHP tests.
 
 ## Rule 2: Mock boundaries in PHP
 

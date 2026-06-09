@@ -86,6 +86,19 @@ if (existsSync(secDir)) {
   }
 }
 
+// --- Check 5: clean-test-pro reference files agree on the rule count ---
+// SKILL.md defines ten core rules; the per-stack references must not say "nine".
+const testDir = join(skillsDir, "clean-test-pro");
+if (existsSync(testDir)) {
+  for (const file of walk(testDir).filter((f) => f.endsWith(".md"))) {
+    const text = readFileSync(file, "utf8");
+    if (/\bnine (?:core )?rules\b/i.test(text))
+      fail(
+        `${file.replace(repoRoot + "/", "")}: says "nine rules" — clean-test-pro now has ten`
+      );
+  }
+}
+
 if (failures.length) {
   console.error(`✗ ${failures.length} skill-verification failure(s):\n`);
   for (const f of failures) console.error("  - " + f);

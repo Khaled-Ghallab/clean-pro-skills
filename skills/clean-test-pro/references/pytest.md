@@ -1,6 +1,6 @@
 # Python / pytest Patterns
 
-Concrete applications of the nine rules for pytest projects. Read this when reviewing or writing Python tests.
+Concrete applications of the ten rules for pytest projects. Read this when reviewing or writing Python tests.
 
 ## Rule 2: Mock boundaries in Python
 
