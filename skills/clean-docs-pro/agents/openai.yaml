@@ -1,0 +1,4 @@
+interface:
+  display_name: "Clean Docs Pro"
+  short_description: "Documentation accuracy guardrails for AI agents"
+  default_prompt: "Use $clean-docs-pro after documentation is written or changed to review it for drift, hallucinations, and unverifiable claims."
