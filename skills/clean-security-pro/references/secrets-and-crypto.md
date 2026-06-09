@@ -1,6 +1,6 @@
 # Secrets and Cryptography
 
-Source: CWE-798 (hard-coded credentials), CWE-327 (broken/risky crypto), CWE-916 (weak password hash), CWE-338 (weak PRNG); OWASP Secrets Management and Cryptographic Storage Cheat Sheets.
+Source: CWE-798 (hard-coded credentials), CWE-327 (broken/risky crypto), CWE-916 (weak password hash), CWE-338 (weak PRNG), CWE-208 (observable timing discrepancy); OWASP Secrets Management, Password Storage, and Cryptographic Storage Cheat Sheets.
 
 ## Contents
 
@@ -9,6 +9,7 @@ Source: CWE-798 (hard-coded credentials), CWE-327 (broken/risky crypto), CWE-916
 - Password hashing
 - Encryption: use AEAD, never invent
 - Randomness: CSPRNG for security
+- Comparing secrets: constant time
 - Tokens and JWT
 - TLS and transport
 
@@ -40,11 +41,16 @@ Passwords use a slow, salted, purpose-built hash. Never a general-purpose fast h
 ```text
 # Unsafe
 md5(pw)   sha1(pw)   sha256(pw)            # fast → crackable at billions/sec
-# Safe
-argon2.hash(pw)   bcrypt.hash(pw)   scrypt(pw)
+# Safe — OWASP Password Storage Cheat Sheet order of preference
+argon2id(pw)                               # first choice
+scrypt(pw)   bcrypt(pw)                    # solid alternatives
+pbkdf2(pw, iterations=current_owasp_floor) # FIPS contexts and Web Crypto-only
+                                           # runtimes (edge/workers) — keep the
+                                           # iteration count at the current
+                                           # OWASP-recommended floor
 ```
 
-Verify with the library's constant-time `verify`. Do not invent a salt-and-pepper scheme around a fast hash.
+Verify with the library's constant-time `verify`. Do not invent a salt-and-pepper scheme around a fast hash. A raw single-pass `sha256(pw)` is never acceptable; PBKDF2-SHA256 with a current iteration count is.
 
 ## Encryption: use AEAD, never invent
 
@@ -72,6 +78,20 @@ random.random()   Math.random()   rand()   seeded PRNG
 secrets.token_urlsafe(32)        # Python
 crypto.randomBytes(32)           # Node
 SecureRandom                     # Java
+```
+
+## Comparing secrets: constant time
+
+`==` on secret material returns early at the first differing byte — the response time leaks how much of the value matched (CWE-208). Any comparison of tokens, MACs, signatures, API keys, or OTPs uses a constant-time compare.
+
+```text
+# Unsafe
+if token == stored_token: ...
+if computed_hmac == received_hmac: ...
+# Safe
+hmac.compare_digest(token, stored_token)    # Python
+crypto.timingSafeEqual(a, b)                # Node
+hash_equals($a, $b)                         # PHP
 ```
 
 ## Tokens and JWT
