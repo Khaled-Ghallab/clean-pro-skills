@@ -11,11 +11,13 @@ names instead of inline URLs so rule guidance stays readable.
 
 ## Standards And Catalogs
 
-- **OWASP Top 10:2021**: https://owasp.org/Top10/
-- **CWE Top 25 Most Dangerous Software Weaknesses**: https://cwe.mitre.org/top25/
-- **OWASP Application Security Verification Standard (ASVS)**: https://owasp.org/www-project-application-security-verification-standard/
-- **OWASP Cheat Sheet Series (SQLi, XSS, Secrets, Crypto, SSRF, Deserialization)**: https://cheatsheetseries.owasp.org/
-- **OWASP Top 10 for LLM Applications**: https://genai.owasp.org/llm-top-10/
+- **OWASP Top 10:2025** (final, released January 2026): https://owasp.org/Top10/2025/
+- **OWASP Top 10:2021** (for the mapping table): https://owasp.org/Top10/
+- **CWE Top 25 Most Dangerous Software Weaknesses, 2025 edition**: https://cwe.mitre.org/top25/
+- **OWASP Application Security Verification Standard (ASVS) 5.0**: https://owasp.org/www-project-application-security-verification-standard/
+- **OWASP Cheat Sheet Series (SQLi, XSS, CSRF, Secrets, Password Storage, Crypto, SSRF, Deserialization)**: https://cheatsheetseries.owasp.org/
+- **OWASP Top 10 for LLM Applications (2025)**: https://genai.owasp.org/llm-top-10/
+- **OWASP API Security Top 10 (2023)** (object/property-level authorization): https://owasp.org/API-Security/
 
 ## AI Code-Security Research And Field Reports
 
@@ -30,8 +32,11 @@ names instead of inline URLs so rule guidance stays readable.
 
 - **CWE-798 hard-coded credentials**: https://cwe.mitre.org/data/definitions/798.html
 - **CWE-89 SQL injection**: https://cwe.mitre.org/data/definitions/89.html
+- **CWE-352 cross-site request forgery**: https://cwe.mitre.org/data/definitions/352.html
 - **CWE-918 SSRF**: https://cwe.mitre.org/data/definitions/918.html
 - **CWE-502 deserialization**: https://cwe.mitre.org/data/definitions/502.html
+- **CWE-915 mass assignment**: https://cwe.mitre.org/data/definitions/915.html
+- **CWE-770 allocation without limits**: https://cwe.mitre.org/data/definitions/770.html
 - **OSV — open-source vulnerability database**: https://osv.dev/
 - **National Vulnerability Database (NVD)**: https://nvd.nist.gov/
 - **Semgrep / CodeQL (SAST), gitleaks / trufflehog (secret scanning)**: https://semgrep.dev/ · https://codeql.github.com/ · https://github.com/gitleaks/gitleaks

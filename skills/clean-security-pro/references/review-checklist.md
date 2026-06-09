@@ -36,11 +36,12 @@ When the user asks you to **security-review, audit, or assess** code (rather tha
 <controls done right — parameterized queries, real authz, secrets in env>
 
 ## Coverage
-- [ ] Untrusted-input boundaries (injection, SSRF, deserialization)
-- [ ] Authentication and authorization (incl. IDOR / missing checks)
+- [ ] Untrusted-input boundaries (injection, SSRF, deserialization, mass assignment)
+- [ ] Authentication and authorization (incl. IDOR / missing checks / CSRF)
 - [ ] Secrets and cryptography
-- [ ] Misconfiguration and data exposure
+- [ ] Misconfiguration, data exposure, and resource limits
 - [ ] Dependencies / supply chain
+- [ ] LLM application risks (if the code calls an LLM)
 - [ ] AI-specific failure modes
 ```
 
@@ -50,19 +51,20 @@ Severity uses the SKILL.md guide (Critical / High / Medium / Low). Lead with wha
 
 Before walking rules, identify where untrusted data enters and where it lands:
 
-- **Sources:** request params/body/headers/cookies, uploaded files, query strings, third-party API responses, message-queue payloads, env in multi-tenant contexts.
-- **Sinks:** SQL/NoSQL queries, shell/subprocess, filesystem paths, HTML/template output, deserializers, outbound HTTP, redirects, `eval`-family.
+- **Sources:** request params/body/headers/cookies, uploaded files, query strings, third-party API responses, message-queue payloads, env in multi-tenant contexts, LLM/model outputs, retrieved RAG documents.
+- **Sinks:** SQL/NoSQL queries, shell/subprocess, filesystem paths, HTML/template output, deserializers, outbound HTTP, redirects, `eval`-family, LLM prompts, agent tool calls.
 - **Trust boundaries:** auth checks, authorization checks, input validation. Note where a source reaches a sink without crossing one — that path is the review's spine.
 
 ## Walk order
 
-1. **Injection & input** ([cwe-and-injection.md](cwe-and-injection.md)) — trace each source→sink path: parameterized? encoded? allow-listed? canonicalized? No `eval`/unsafe-deserialize on input?
-2. **Access control** ([owasp-top10.md](owasp-top10.md) A01) — for each protected action, is there a server-side ownership/permission check against the specific resource? Flag the *absent* check (IDOR), not just the wrong one.
-3. **Auth** (A07) — vetted mechanism? Tokens verified (signature, algorithm pinned, expiry)? Strong password hashing? Rate limiting on login?
-4. **Secrets & crypto** ([secrets-and-crypto.md](secrets-and-crypto.md)) — any literal secret (incl. tests/samples)? Weak hash, invented crypto, static IV, `Math.random` for a security value, disabled TLS verify?
-5. **Misconfig & exposure** (A05/A09) — debug on, wildcard CORS, default creds, stack traces or secrets in errors/logs?
-6. **Supply chain** ([supply-chain.md](supply-chain.md)) — new dependency verified on the registry (anti-slopsquat)? Pinned via lockfile? Known CVE? Unvetted install script?
-7. **AI failure modes** ([ai-security-failure-modes.md](ai-security-failure-modes.md)) — any plausible-but-insecure pattern, any security control weakened "to make it work", any hallucinated/typosquat import?
+1. **Injection & input** ([cwe-and-injection.md](cwe-and-injection.md)) — trace each source→sink path: parameterized? encoded? allow-listed? canonicalized? No `eval`/unsafe-deserialize on input? Request bodies bound to explicit fields (no mass assignment)? Any regex on untrusted input backtracking-safe?
+2. **Access control** ([owasp-top10.md](owasp-top10.md) A01) — for each protected action, is there a server-side ownership/permission check against the specific resource? Flag the *absent* check (IDOR), not just the wrong one. Outbound URLs from input allow-listed (SSRF, open redirect)?
+3. **Auth & sessions** (A07) — vetted mechanism? Tokens verified (signature, algorithm pinned, expiry)? Strong password hashing? Rate limiting on login? CSRF protection on cookie-authenticated state changes, `SameSite` cookies, no state change on GET?
+4. **Secrets & crypto** ([secrets-and-crypto.md](secrets-and-crypto.md)) — any literal secret (incl. tests/samples/prompts)? Weak hash, invented crypto, static IV, `Math.random` for a security value, `==` on a token, disabled TLS verify?
+5. **Misconfig, exposure & limits** (A02/A09/A06) — debug on, wildcard CORS, default creds, stack traces or secrets in errors/logs? Unbounded uploads, loops, or expensive operations? Check-then-act races on money/inventory/tokens? Fail-open error handling around any security control (A10)?
+6. **Supply chain** ([supply-chain.md](supply-chain.md), A03) — new dependency verified on the registry (anti-slopsquat)? Pinned via lockfile? Known CVE? Unvetted install script?
+7. **LLM application code** ([llm-app-security.md](llm-app-security.md)) — if the code calls an LLM: model output reaching SQL/shell/HTML/`eval` unencoded? Tools running beyond the end user's permissions? Secrets in prompts? Uncapped agent loops or token budgets? RAG queries missing the tenant filter?
+8. **AI failure modes** ([ai-security-failure-modes.md](ai-security-failure-modes.md)) — any plausible-but-insecure pattern, any security control weakened "to make it work", any hallucinated/typosquat import?
 
 ## What to do with each finding
 
