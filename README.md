@@ -74,3 +74,9 @@ the table to catch regressions when a rule changes. See [evals/README.md](evals/
 ## License
 
 [MIT](LICENSE) © Khaled Ghallab
+
+---
+
+*Thanks for reading this far. These skills exist because reviewing code like it
+matters is a habit worth automating — if they save you one bad merge, they did
+their job.*
